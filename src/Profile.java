@@ -2,7 +2,7 @@
  * 프로그램 이름 : Po Tweeter
  * 버전 : Version 0.9
  * 파일명 : Profile.java
- * 설명 : 프로필 처리
+ * 설명 : 프로필 관리
  * 최종 수정 날짜 : 14.02.09
  */
 
@@ -33,7 +33,15 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.StringTokenizer;
 
 public class Profile extends JFrame {
@@ -54,23 +62,55 @@ public class Profile extends JFrame {
 	private JTextField txtPhoto;
 	private JPasswordField txtpPW;
 	private JPasswordField txtpRePW;
-
+ 
 	private JButton btnPhoto;
 	private JButton btnEdit;
 	private JButton btnCancle;
 	
 	private String id;
 	
+	
 	/* 생성자 */
 	public Profile(String id) {
+		
+		
 		setTitle("Profile");
 		setResizable(false);
-		this.id=id;
-		
+		this.id=id;	
 		init();
 		start();
-	
+		importData();
 	}
+	
+	
+	public void importData(){
+				
+		String data[];
+		
+		if(!Control_Data.isSameID(id)){
+			JOptionPane.showMessageDialog(null, "There is't same ID.","Warning",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		data=Control_Data.outputID3(id);
+		
+		txtID.setText(data[0]);
+		txtName.setText(data[1]);
+		txtEmail.setText(data[2]);
+		txtPhone.setText(data[3]);
+		txtpPW.setText(data[4]);
+		txtpRePW.setText(data[5]);
+		
+		
+		
+		String path=Control_Data.outputImage(id);
+		txtPhoto.setText(path);
+		lblPhoto.setText("");
+		lblPhoto.setIcon(new ImageIcon(path));
+		
+	}
+	
+	
 
 	/* 화면구성 메소드 */
 	private void init() {
@@ -234,12 +274,12 @@ public class Profile extends JFrame {
 	
 	/* 이벤트 지정 메소드 */
 	public void start() { // 액션이벤트 지정 메소드
-		btnPhoto.addActionListener(new btnPhotoAction()); // 검색 버튼
-		btnCancle.addActionListener(new btnCancleAction()); // 가입 버튼
-		btnEdit.addActionListener(new btnJoinAction()); // 취소 버튼
+		btnPhoto.addActionListener(new btnPhotoAction()); // 사진검색 버튼
+		btnCancle.addActionListener(new btnCancleAction()); // 취소 버튼
+		btnEdit.addActionListener(new btnEditAction()); // 에딧 버튼
 	}
-
-	/* 가입 버튼 액션 이벤트 */
+	
+	/* 사진검색 버튼 액션 이벤트 */
 	class btnPhotoAction implements ActionListener
 	{
 		JFileChooser chooser;
@@ -252,6 +292,7 @@ public class Profile extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnPhoto) 
 			{
+				
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG&PNG","jpg","png");
 				chooser.setFileFilter(filter);
 				
@@ -265,6 +306,7 @@ public class Profile extends JFrame {
 				txtPhoto.setText(chooser.getSelectedFile().getPath());
 				lblPhoto.setText(null);
 				lblPhoto.setIcon(new ImageIcon(filePath));
+
 			}
 		}
 	}
@@ -281,19 +323,21 @@ public class Profile extends JFrame {
 		}
 	}
 	
-	/* 검색 버튼 액션 이벤트 */
-	class btnJoinAction implements ActionListener
+	/* 에딧 액션 이벤트 */
+	class btnEditAction implements ActionListener
 	{
+		@SuppressWarnings("deprecation")
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnEdit) 
 			{
-				/* 공백 확인 */
-				if(txtID.getText() == null || txtID.getText().equals("")){
-					JOptionPane.showMessageDialog(null, "ID blank is empty.","Warning",JOptionPane.ERROR_MESSAGE);
-					txtID.requestFocus();
+				int result = JOptionPane.showConfirmDialog(null, "If you press \"Yes\", you apply to edit your information and exit.","Edit",JOptionPane.YES_NO_OPTION);
+				if(result == JOptionPane.CLOSED_OPTION || result == JOptionPane.NO_OPTION ){
 					return;
-				} else if(txtName.getText() == null || txtName.getText().equals("")){
+				} 
+				
+				/* 공백 확인 */
+				 if(txtName.getText() == null || txtName.getText().equals("")){
 					JOptionPane.showMessageDialog(null, "Name blank is empty.","Warning",JOptionPane.ERROR_MESSAGE);
 					txtName.requestFocus();
 					return;
@@ -320,11 +364,7 @@ public class Profile extends JFrame {
 				}
 				
 				/* 길이 확인 */
-				if(txtID.getText().length() < 4){
-					JOptionPane.showMessageDialog(null, "ID blank is too short.","Warning",JOptionPane.ERROR_MESSAGE);
-					txtID.requestFocus();
-					return;
-				} else if(txtName.getText().length() < 2){
+				 if(txtName.getText().length() < 2){
 					JOptionPane.showMessageDialog(null, "Name blank is too short.","Warning",JOptionPane.ERROR_MESSAGE);
 					txtName.requestFocus();
 					return;
@@ -410,17 +450,16 @@ public class Profile extends JFrame {
 							}
 					}catch(IOException e1){	}
 				}
-				
-				/* ID 중복 확인 */
-				if(Control_Data.isSameID(txtID.getText())){
-					JOptionPane.showMessageDialog(null, "The ID is same with another ID.","Warning",JOptionPane.ERROR_MESSAGE);
-					txtID.requestFocus();
-					return;
-				}
-				
-				Control_Data.insertData(txtID.getText(), txtpPW.getText(), txtName.getText(), txtEmail.getText(), txtPhone.getText(), txtPhoto.getText());
-				setVisible(false);
+
+				Control_Data.changeData(txtID.getText(), txtpPW.getText(), txtName.getText(), txtEmail.getText(), txtPhone.getText(), txtPhoto.getText());
+				File file= new File("icon/profile/"+id+".jpg");
+				file.delete();
+				Logout.logoutCheck(id);
+				System.exit(0);
+				setVisible(false);		
 			}
-		}
+		}		
+		
 	}
+
 }
