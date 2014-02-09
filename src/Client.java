@@ -63,6 +63,9 @@ public class Client extends JFrame {
 		File file = new File("icon/profile");
 		if(!file.exists())
 			file.mkdir();
+		file = new File("icon/data");
+		if(!file.exists())
+			file.mkdir();
 	}
 
 	/* 화면구성 메소드 */
@@ -125,18 +128,26 @@ public class Client extends JFrame {
 							.addGap(4)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 								.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-									.addComponent(btnEnter, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
+									.addComponent(btnEnter, GroupLayout.PREFERRED_SIZE, 101, 
+
+GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-									.addComponent(btnJoin, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE))
+									.addComponent(btnJoin, GroupLayout.PREFERRED_SIZE, 92, 
+
+GroupLayout.PREFERRED_SIZE))
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 										.addComponent(lblID)
 										.addComponent(lblPW))
 									.addGap(18)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(txtfpPW, GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+										.addComponent(txtfpPW, GroupLayout.DEFAULT_SIZE, 178, 
+
+Short.MAX_VALUE)
 										.addComponent(txtfID, GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-										.addComponent(lblLogo, GroupLayout.PREFERRED_SIZE, 168, GroupLayout.PREFERRED_SIZE)))))
+										.addComponent(lblLogo, GroupLayout.PREFERRED_SIZE, 168, 
+
+GroupLayout.PREFERRED_SIZE)))))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(lblLogoImage, GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
 							.addGap(160)))
@@ -152,11 +163,15 @@ public class Client extends JFrame {
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblID, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtfID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(txtfID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, 
+
+GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblPW, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtfpPW, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(txtfpPW, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, 
+
+GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 						.addComponent(btnJoin, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

@@ -725,7 +725,126 @@ public class Control_Data {
 				}
 			}
 		}
-		
+	}
+	
+	/* DB File 입력 */
+	public static String inputSFile(String c_id, String c_f_name, String c_file ) {
+
+		String sql = "insert into file ( id, f_name, file) values (?, ?, ?)";
+		String path = null;
+
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		FileInputStream fis=null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://" + Main.DBIP + ":3306/po_tweeter", "POMA", "9353");
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, c_id);
+			psmt.setString(2, c_f_name);
+			fis = new FileInputStream(c_file);
+			psmt.setBinaryStream(3, fis);
+			psmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+
+			if (psmt != null) {
+				try {
+					psmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return path;
+	}
+	
+	/* DB File 출력 */
+	public static String outputSFile(String c_id, String c_f_name) {
+
+		String sql = "select * from file where id=? and f_name=?";
+		String path = null;
+
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		FileOutputStream fos = null;
+		InputStream is=null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://" + Main.DBIP + ":3306/po_tweeter", "POMA", "9353");
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, c_id);
+			psmt.setString(2, c_f_name);
+			ResultSet rs = psmt.executeQuery();
+			rs.last();
+			is = (InputStream) rs.getBinaryStream("file");
+			fos = new FileOutputStream("icon/data/"+c_f_name);
+			if(fos != null)
+				path = "icon/data/"+c_f_name;
+			byte[] b = new byte[BUFFER_SIZE];
+			int n;
+			while ((n = is.read(b)) > 0) {
+				fos.write(b, 0, n);
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+
+			if (psmt != null) {
+				try {
+					psmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return path;
 	}
 }
 

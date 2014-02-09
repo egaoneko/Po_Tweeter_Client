@@ -46,6 +46,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JLabel;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Color;
@@ -56,6 +57,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 
 import say.swing.JFontChooser;
+
 import javax.swing.ScrollPaneConstants;
 
 
@@ -132,6 +134,10 @@ public class MainView extends JFrame {
 	static boolean messageFlag=true;
 	static boolean autoEmotFlag=false;
 	static boolean offline=false;
+	
+	/* Image & File 전송 */
+	
+	private FileSend fs;
 
 	/* 생성자 */
 	public MainView(String id, String pw)// 생성자
@@ -431,9 +437,9 @@ public class MainView extends JFrame {
 				if(cbbMenu.getSelectedIndex() == 0)
 					emot = new Emoticon(dos);
 				if(cbbMenu.getSelectedIndex() == 1)
-					send_Message("㎮IMAGE㎮test1㎮test2㎮");
+					fs = new FileSend("IMAGE",dos,id);
 				if(cbbMenu.getSelectedIndex() == 2)
-					send_Message("㎮FILE㎮test1㎮test2㎮");
+					fs = new FileSend("FILE",dos,id);
 				if(cbbMenu.getSelectedIndex() == 3){
 					String url= JOptionPane.showInputDialog("Input URL.");
 					if(url!=null)
@@ -532,8 +538,13 @@ public class MainView extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mntmExit ) 
 			{
-				Logout.logoutCheck(id);
-				System.exit(0);
+				int result = JOptionPane.showConfirmDialog(null, "If you press \"Yes\", you exit.","Member Leave",JOptionPane.YES_NO_OPTION);
+				if(result == JOptionPane.CLOSED_OPTION || result == JOptionPane.NO_OPTION ){
+					return;
+				} else if(result == JOptionPane.YES_OPTION){
+					Logout.logoutCheck(id);
+					System.exit(0);
+				}
 			}
 		}
 	}
@@ -728,12 +739,26 @@ public class MainView extends JFrame {
 							appendI(cmd[2]);
 							break;
 						case IMAGE:
+							String path = Control_Data.outputSFile(cmd[2], cmd[3]);
 							/* 이미지 구현 후 주소값 반환을 통해 수행 */
 							appendC(cmd[0]);
 							append("\n");
-							appendI2("icon/test.jpg");
+							appendI2(path);
 							break;
 						case FILE:
+							int result = JOptionPane.showConfirmDialog(null, "If you press \"Yes\", you allow a file download","File Download",JOptionPane.YES_NO_OPTION);
+							if(result == JOptionPane.CLOSED_OPTION || result == JOptionPane.NO_OPTION ){
+								break;
+							}
+							String f_path = Control_Data.outputSFile(cmd[2], cmd[3]);
+							
+							File file = new File(f_path);
+							String f_path2 = file.getAbsolutePath();
+							File dir = new File(f_path2.substring(0, f_path2.lastIndexOf(File.separator)));
+							if (Desktop.isDesktopSupported()) {
+							    Desktop.getDesktop().open(dir);
+							}
+							
 							break;
 						case LINK:
 							Link link = new Link(cmd[2],cmd[3]);
@@ -809,7 +834,6 @@ public class MainView extends JFrame {
 		 * 명령어 분석기2
 		 */
 		public boolean com_Ana22(String str){
-			
 			String temp;
 			Vector vc = new Vector(); 
 			int cnt=0;
@@ -869,6 +893,7 @@ public class MainView extends JFrame {
 		try {
 			Document doc = txtArea.getDocument();
 			doc.insertString(doc.getLength(), s, null);
+			txtArea.setAutoscrolls(true);
 			setEndline();
 		} catch (BadLocationException exc) {
 			exc.printStackTrace();
@@ -891,6 +916,7 @@ public class MainView extends JFrame {
         
         try {
         	doc.insertString(doc.getLength(), s,style);
+        	txtArea.setAutoscrolls(true);
         	setEndline();
         }
         catch (BadLocationException e){}	

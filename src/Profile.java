@@ -293,7 +293,7 @@ public class Profile extends JFrame {
 			if (e.getSource() == btnPhoto) 
 			{
 				
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG&PNG","jpg","png");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Images","jpg","png", "jpeg","gif","bmp");
 				chooser.setFileFilter(filter);
 				
 				int ret = chooser.showOpenDialog(null);

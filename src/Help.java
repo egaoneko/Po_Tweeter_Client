@@ -129,6 +129,7 @@ public class Help extends JFrame {
 					.addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
 					.addContainerGap())
 		);
+		txtArea1.setCaretPosition(0);
 		tabPane1.setLayout(gl_tabPane1);
 		
 		pane.addTab("P2", tabPane2);
@@ -154,6 +155,7 @@ public class Help extends JFrame {
 					.addComponent(scrollPane2, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
+		txtArea2.setCaretPosition(0);
 		tabPane2.setLayout(gl_tabPane2);
 
 
@@ -182,7 +184,7 @@ public class Help extends JFrame {
 					.addComponent(scrollPane3, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
-
+		txtArea3.setCaretPosition(0);
 		tabPane3.setLayout(gl_tabPane3);
 		
 		
@@ -209,6 +211,7 @@ public class Help extends JFrame {
 					.addComponent(scrollPane4, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
+		txtArea4.setCaretPosition(0);
 		tabPane4.setLayout(gl_tabPane4);
 		
 		

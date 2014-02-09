@@ -141,6 +141,7 @@ public class Link extends JFrame {
 			if (e.getSource() == btnEnter) 
 			{
 				OpenBrowser.openURL(url);
+				setVisible(false);
 			}
 		}
 	}
