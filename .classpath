@@ -15,7 +15,5 @@
 	<classpathentry kind="lib" path="C:/eclipse/plugins/com.ibm.icu_50.1.1.v201304230130.jar" sourcepath="C:/eclipse/plugins/com.ibm.icu_50.1.1.v201304230130.jar"/>
 	<classpathentry kind="lib" path="C:/eclipse/plugins/org.eclipse.ui.forms_3.6.1.v20130822-1117.jar" sourcepath="C:/eclipse/plugins/org.eclipse.ui.forms_3.6.1.v20130822-1117.jar"/>
 	<classpathentry kind="lib" path="C:/Workspace/ChatC/jfontchooser-1.0.5.jar"/>
-	<classpathentry kind="lib" path="C:/Workspace/ChatC/activation.jar"/>
-	<classpathentry kind="lib" path="C:/Workspace/ChatC/mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
